@@ -1,10 +1,10 @@
-📝 Customer Feedback Analyzer
+## 📝 Customer Feedback Analyzer
 
 An end-to-end GenAI application that analyzes customer reviews and provides useful insights for businesses.
 
 The application uses Streamlit for the frontend, FastAPI for the backend, Gemini API for AI-powered analysis, and SQLite for storing review results.
 
-✨ Features
+## ✨ Features
 
 - Analyze multiple customer reviews at once
 - Classify reviews as Positive, Negative, or Neutral
@@ -17,7 +17,7 @@ The application uses Streamlit for the frontend, FastAPI for the backend, Gemini
 - Save analyzed reviews to a SQLite database
 - View previously saved review history
 
-🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 - Python
 - Streamlit – Frontend dashboard
@@ -26,7 +26,7 @@ The application uses Streamlit for the frontend, FastAPI for the backend, Gemini
 - SQLite – Database
 - Requests – API communication
 
-🔄 How It Works
+## 🔄 How It Works
 
 Customer Reviews
        ↓
@@ -40,21 +40,20 @@ Sentiment + Score + Theme + Suggestion
        ↓
 SQLite Database
 
-📸 Screenshots
+## 📸 Screenshots
 
-Dashboard
+### 🖥️ Application Dashboard
 
-"Dashboard" (screenshots/dashboard.png)
+![Customer Feedback Analyzer Dashboard](screenshots/dashboard.png)
 
-Analytics
+### 📊 Review Analytics
 
-"Analytics" (screenshots/analytics.png)
+![Customer Feedback Analyzer Analytics](screenshots/analytics.png)
 
-Results
+### 📋 Analysis Results
 
-"Results" (screenshots/results.png)
-
-🚀 How to Run
+![Customer Feedback Analyzer Results](screenshots/results.png)
+## 🚀 How to Run
 
 1. Clone the repository
 
@@ -85,7 +84,7 @@ uv run streamlit run app.py
 
 Then open the local Streamlit URL shown in the terminal.
 
-📂 Project Structure
+## 📂 Project Structure
 
 python_feedback_analyzer/
 │
@@ -102,7 +101,7 @@ python_feedback_analyzer/
     ├── analytics.png
     └── results.png
 
-🎯 What I Learned
+## 🎯 What I Learned
 
 This project helped me practice:
 
@@ -115,7 +114,7 @@ This project helped me practice:
 - Creating simple data visualizations
 - Connecting frontend, backend, AI, and database components
 
-👩‍💻 Project
+## Project
 
 Customer Feedback Analyzer
 Built with Python, FastAPI, Streamlit, Gemini API, and SQLite.
