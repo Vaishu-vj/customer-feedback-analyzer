@@ -47,25 +47,44 @@ if st.button("Analyze"):
         st.warning("Please paste at least one review.")
     else:
         results = []
+
         # Go through each review and ask our backend to analyze it.
         for review in reviews:
             try:
-                response = requests.post(API_URL, json={"text": review})
+                response = requests.post(
+                    API_URL,
+                    json={"text": review},
+                    timeout=60
+                )
+
+                # Show HTTP errors instead of hiding them.
+                response.raise_for_status()
                 data = response.json()
+
                 results.append({
                     "review": review,
                     "label": data["label"],
                     "score": data["score"],
                     "theme": data["theme"],
-                    "suggestion": data["suggestion"],
+                    "suggestion": data.get(
+                        "suggestion",
+                        "No suggestion provided"
+                    ),
                 })
-            except Exception:
-                # One bad review should not stop the whole batch.
+
+            except Exception as e:
+                # Display the actual error for debugging.
+                st.error(
+                    f"Analysis failed: {type(e).__name__}: {e}"
+                )
+
+                # Keep the failed review in the results.
                 results.append({
                     "review": review,
                     "label": "error",
                     "score": 0,
                     "theme": "error",
+                    "suggestion": "Analysis failed",
                 })
 
         # Save results in session_state so they survive button clicks.
@@ -78,16 +97,16 @@ if "results" in st.session_state:
     st.subheader("Results")
 
     filter_option = st.selectbox(
-       "Filter reviews",
-       ["All", "Negative"]
+        "Filter reviews",
+        ["All", "Negative"]
     )
 
     if filter_option == "Negative":
-       filtered_results = [
-           r for r in results if r["label"] == "negative"
-       ]
+        filtered_results = [
+            r for r in results if r["label"] == "negative"
+        ]
     else:
-       filtered_results = results
+        filtered_results = results
 
     st.dataframe(filtered_results)
 
@@ -99,9 +118,19 @@ if "results" in st.session_state:
     st.subheader("Summary")
     col1, col2, col3 = st.columns(3)
     col1.metric("Reviews", len(results))
+
     if scores:
-        col2.metric("Average score", round(sum(scores) / len(scores), 1))
-        col3.metric("% Positive", f"{round(len(positive) / len(results) * 100)}%")
+        col2.metric(
+            "Average score",
+            round(sum(scores) / len(scores), 1)
+        )
+        col3.metric(
+            "% Positive",
+            f"{round(len(positive) / len(results) * 100)}%"
+        )
+    else:
+        col2.metric("Average score", "N/A")
+        col3.metric("% Positive", "N/A")
 
     if themes:
         # Counter tells us which theme appears most often.
@@ -120,19 +149,20 @@ if "results" in st.session_state:
 # ---- Show everything we have ever saved (reads from the database) ----
 with st.expander("📚 Saved history (all reviews in the database)"):
     history = load_history()
+
     if history:
         st.write(f"Total saved so far: {len(history)}")
         st.dataframe(
-           [
-              {
-                 "review": r[0],
-                 "label": r[1],
-                 "score": r[2],
-                 "theme": r[3],
-                 "suggestion": r[4],
-              }
-              for r in history
-           ]
+            [
+                {
+                    "review": r[0],
+                    "label": r[1],
+                    "score": r[2],
+                    "theme": r[3],
+                    "suggestion": r[4],
+                }
+                for r in history
+            ]
         )
     else:
         st.write("Nothing saved yet. Analyze some reviews and click Save.")
